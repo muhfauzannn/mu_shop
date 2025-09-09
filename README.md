@@ -72,10 +72,11 @@ python manage.py migrate
 
 ## 🏗️ Bagan Alur Request-Response Django
 
+<img width="1132" height="447" alt="Screenshot 2025-09-10 at 00 41 20" src="https://github.com/user-attachments/assets/e729ee72-3ec3-41a2-9b46-50852f773fc8" />
 
 urls.py: Peta rute. Mencocokkan URL yang diminta lalu mengarahkan ke fungsi/kelas di views.py.
 
-views.py: Otak logika. Menerima request, ambil/ubah data via models.py bila perlu, lalu render template atau kirim JSON/redirect.
+views.py: Menerima request, ambil/ubah data via models.py, lalu render template atau kirim JSON/redirect.
 
 models.py: Pintu ke database lewat ORM. Definisi tabel & relasi. Dipanggil dari views.py untuk query/menyimpan data.
 
