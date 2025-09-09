@@ -23,16 +23,13 @@ def show_main(request):
         'name': 'Muhammad Fauzan',
         'npm': '2406496302',
         'class': 'E',
-        
+
         # Product data
         'products': products,
         'featured_products': featured_products,
         'jerseys': jerseys,
         'accessories': accessories,
         
-        # Statistics
-        'total_products': total_products,
-        'featured_count': featured_count,
         
         # Categories for navigation
         'categories': Product.CATEGORY_CHOICES,
