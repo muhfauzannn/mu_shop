@@ -14,10 +14,10 @@
 ### 1. Membuat Proyek Django Baru
 ```bash
 # Membuat virtual environment
-python -m venv mu_shop_env
+python -m venv env
 
 # Mengaktifkan virtual environment
-source mu_shop_env/bin/activate 
+source env/bin/activate 
 
 # Install Django
 pip install django
@@ -109,4 +109,4 @@ Asdos menurut saya sudah sangat membantu, apalagi jika di dalam lab saya pribadi
 ## 📚 Referensi
 - [Django Official Documentation](https://docs.djangoproject.com/)
 - [Django Tutorial](https://docs.djangoproject.com/en/stable/intro/tutorial01/)
-- [PWS Documentation](https://pbp.cs.ui.ac.id/)
+- [PBP Tutorial](https://pbp-fasilkom-ui.github.io/ganjil-2026/)
