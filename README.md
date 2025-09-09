@@ -73,6 +73,14 @@ python manage.py migrate
 ## 🏗️ Bagan Alur Request-Response Django
 
 
+urls.py: Peta rute. Mencocokkan URL yang diminta lalu mengarahkan ke fungsi/kelas di views.py.
+
+views.py: Otak logika. Menerima request, ambil/ubah data via models.py bila perlu, lalu render template atau kirim JSON/redirect.
+
+models.py: Pintu ke database lewat ORM. Definisi tabel & relasi. Dipanggil dari views.py untuk query/menyimpan data.
+
+Template HTML: Tampilan. Berkas .html yang diisi data (context) dari view lalu dikirim sebagai response ke browser.
+
 ---
 
 ## ⚙️ Peran settings.py dalam Proyek Django
