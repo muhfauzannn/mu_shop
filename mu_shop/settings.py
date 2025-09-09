@@ -56,6 +56,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://muhammad-fauzan44-mushop.pbp.cs.ui.ac.id"
+]
+
 ROOT_URLCONF = 'mu_shop.urls'
 
 TEMPLATES = [
