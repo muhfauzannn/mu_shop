@@ -18,8 +18,11 @@ def show_main(request):
     featured_count = featured_products.count()
     
     context = {
-        'app_name': 'MU Shop',
+        'app_name': 'Manchester Shop',
         'shop_description': 'Official Manchester United Merchandise Store',
+        'name': 'Muhammad Fauzan',
+        'npm': '2406496302',
+        'class': 'E',
         
         # Product data
         'products': products,
