@@ -1,0 +1,186 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<style>
+  body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #db1d24 0%, #ff4444 100%);
+  }
+
+  .bg-gradient-primary-hover:hover {
+    background: linear-gradient(135deg, #ff4444 0%, #db1d24 100%);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out;
+  }
+</style>
+
+<div class="min-h-screen bg-gray-50 py-20">
+  <div class="max-w-6xl mt-20 mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Back Button -->
+    <div class="mt-8 mb-8">
+      <a
+        href="{% url 'main:show_main' %}"
+        class="inline-flex items-center text-[#db1d24] hover:text-red-700 font-semibold transition-colors duration-300"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+        Back to Products
+      </a>
+    </div>
+
+    <!-- Product Detail -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Product Image -->
+        <div class="relative h-96 lg:h-full">
+          <img
+            src="{{ product.thumbnail }}"
+            alt="{{ product.name }}"
+            class="w-full h-full object-cover"
+          />
+          {% if product.is_featured %}
+          <div
+            class="absolute top-4 left-4 bg-gradient-primary text-white px-4 py-2 rounded-full text-sm font-bold uppercase shadow-lg"
+          >
+            Featured
+          </div>
+          {% endif %}
+          <div
+            class="absolute top-4 right-4 bg-black/70 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm"
+          >
+            {{ product.get_category_display }}
+          </div>
+        </div>
+
+        <!-- Product Information -->
+        <div class="p-8">
+          <div class="mb-6">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+              {{ product.name }}
+            </h1>
+            <div
+              class="w-24 h-1 bg-gradient-to-r from-[#db1d24] to-red-600 rounded-full mb-6"
+            ></div>
+          </div>
+
+          <!-- Price -->
+          <div class="mb-8">
+            <div class="text-4xl font-bold text-[#db1d24] mb-2">
+              IDR {{ product.price|floatformat:0 }}
+            </div>
+            <p class="text-gray-600">Price includes VAT</p>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">
+              Description
+            </h3>
+            <p class="text-gray-700 leading-relaxed">
+              {{ product.description }}
+            </p>
+          </div>
+
+          <!-- Product Details -->
+          <div class="bg-gray-50 rounded-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">
+              Product Details
+            </h3>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span class="font-semibold text-gray-700">Category:</span>
+                <span class="text-gray-600 ml-2"
+                  >{{ product.get_category_display }}</span
+                >
+              </div>
+              <div>
+                <span class="font-semibold text-gray-700">Featured:</span>
+                <span class="text-gray-600 ml-2">
+                  {% if product.is_featured %}Yes{% else %}No{% endif %}
+                </span>
+              </div>
+              <div>
+                <span class="font-semibold text-gray-700">Added:</span>
+                <span class="text-gray-600 ml-2"
+                  >{{ product.created_at|date:"M d, Y" }}</span
+                >
+              </div>
+              <div>
+                <span class="font-semibold text-gray-700">Updated:</span>
+                <span class="text-gray-600 ml-2"
+                  >{{ product.updated_at|date:"M d, Y" }}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-4">
+            <button
+              class="flex-1 bg-gradient-primary hover:bg-gradient-primary-hover text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m-2.4-2L3 3m4 10v6a1 1 0 001 1h3m-4-7h.01M16 20a1 1 0 100-2 1 1 0 000 2zM9 20a1 1 0 100-2 1 1 0 000 2z"
+                ></path>
+              </svg>
+              Add to Cart
+            </button>
+            <button
+              class="px-6 py-4 border-2 border-gray-300 text-gray-700 hover:border-[#db1d24] hover:text-[#db1d24] rounded-lg transition-all duration-300 flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
+from main.forms import ProductForm
 
 # Create your views here.
 def show_main(request):
@@ -12,10 +13,6 @@ def show_main(request):
     # Get products by category
     jerseys = Product.objects.filter(category='jersey')
     accessories = Product.objects.filter(category='accessories')
-    
-    # Count products
-    total_products = Product.objects.count()
-    featured_count = featured_products.count()
     
     context = {
         'app_name': 'Manchester Shop',
@@ -40,3 +37,21 @@ def show_main(request):
     }
 
     return render(request, "main.html", context)
+
+def create_product(request):
+    form = ProductForm(request.POST or None)
+
+    if(form.is_valid() and request.method == 'POST'):
+        form.save()
+        return redirect('main:show_main')
+    
+    context = {'form': form}
+    return render(request, "create_product.html", context)
+def show_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+
+    context={
+        'product': product
+    }
+    return render(request,"show_product.html", context)
+    
