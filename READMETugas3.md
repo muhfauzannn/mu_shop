@@ -34,4 +34,9 @@
     Tidak ada menurut saya asdos sudah sangat baik dalam melakukan tugasnya.
 
 - [x] Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md.
+      <img width="1209" height="808" alt="Screenshot 2025-09-14 at 14 50 04" src="https://github.com/user-attachments/assets/34f58916-8575-4f2f-b155-9ea3f2917e6b" />
+<img width="1208" height="808" alt="Screenshot 2025-09-14 at 14 49 53" src="https://github.com/user-attachments/assets/393ee470-26aa-47ee-be5f-81f7fd448677" />
+<img width="1219" height="814" alt="Screenshot 2025-09-14 at 14 49 46" src="https://github.com/user-attachments/assets/f952d4a0-00af-4e3e-a29e-6fd9cc92cd66" />
+<img width="1213" height="810" alt="Screenshot 2025-09-14 at 14 49 23" src="https://github.com/user-attachments/assets/32c27950-0860-40b1-8892-9bcdf3828afc" />
+
 - [x] Melakukan add-commit-push ke GitHub.
