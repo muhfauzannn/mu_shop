@@ -136,6 +136,18 @@
                   >{{ product.updated_at|date:"M d, Y" }}</span
                 >
               </div>
+              <div>
+                <span class="font-semibold text-gray-700">Author:</span>
+                {% if product.user %}
+                <span class="text-gray-600 ml-2"
+                  >{{ product.user.username }}</span
+                >
+                {% else %}
+                <span class="text-gray-600 ml-2"
+                  >Anonymous</span
+                >
+                {% endif %}
+              </div>
             </div>
           </div>
 
