@@ -193,3 +193,33 @@ Asdos menurut saya sudah sangat membantu, apalagi jika di dalam lab saya pribadi
     - [x] Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
     - Penggunaan cookies tidak sepenuhnya aman secara default karena bisa dicuri atau dimanipulasi jika tidak diberi proteksi (misalnya lewat serangan XSS atau sniffing jaringan). Django mengatasinya dengan memberi fitur keamanan bawaan seperti menandai cookie penting dengan HttpOnly (tidak bisa diakses JavaScript), Secure (hanya dikirim lewat HTTPS), serta SESSION_COOKIE_SAMESITE untuk mencegah CSRF. Selain itu, Django juga menyimpan data sensitif (seperti session) di server, jadi cookie di browser hanya menyimpan ID acak, bukan data asli.
 - [x] Melakukan add-commit-push ke GitHub.
+
+
+---
+# Readme Tugas 5
+
+- [x] Implementasikan fungsi untuk menghapus dan mengedit product
+- Menambahkan function edit_product dan juga delete_product di views.py lalu menambahkannya ke urls.py, lalu menambahkan button serta membuat halaman edit_product.html
+- [x] Kustomisasi desain pada template HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut:
+    -[x] Kustomisasi halaman login, register, tambah product, edit product, dan detail product semenarik mungkin.
+    - Menambahkan styling menggunakan tailwind dan juga kombinasi dengan vanilla css
+    -[x] Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Kemudian, perhatikan kondisi berikut:
+        -[x] Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
+        - Menambahkan kondisi di main.html saat product kosong
+        -[x] Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card (tidak boleh sama persis dengan desain pada Tutorial!).
+        - Menambahkan kondisi di main.html saat product tidak kosong
+    -[x] Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+    - Menambahkan button yang akan melakukan POST dan DELETE yang sesuai ada di urls.py
+    -[x] Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+    - Membuat template navbar baru di templates root project lalu menambahkannya ke base.html, lalu menggunakan tailwind breakpoints untuk mengatur responsitivitas
+- [x] Menjawab beberapa pertanyaan berikut pada README.md pada root folder (silakan modifikasi README.md yang telah kamu buat sebelumnya; tambahkan subjudul untuk setiap tugas).
+    -[x] Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+    - Urutan prioritas CSS selector ditentukan oleh specificity: inline style > ID selector > class/atribut/pseudo-class selector > elemen/pseudo-element selector. Jika specificity sama, maka aturan yang muncul terakhir di CSS yang akan diterapkan.
+    -[x] Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+    - Responsive design penting karena memastikan tampilan web tetap nyaman diakses di berbagai perangkat (desktop, tablet, smartphone) tanpa perlu versi terpisah. Contoh: Twitter sudah menerapkan responsive design sehingga mudah digunakan di layar kecil, sedangkan situs web lama pemerintahan sering belum responsive sehingga sulit dibaca dan harus diperbesar secara manual.
+    -[x] Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+    - Margin adalah jarak luar elemen terhadap elemen lain, border adalah garis tepi yang membungkus konten+padding, sedangkan padding adalah jarak dalam antara konten dan border.
+    -[x] Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+    - Flexbox digunakan untuk mengatur elemen dalam satu dimensi (baris atau kolom) agar lebih fleksibel, cocok untuk navbar, tombol, atau alignment sederhana. Grid layout bekerja dua dimensi (baris dan kolom) sehingga ideal untuk membuat tata letak kompleks seperti dashboard atau galeri.
+    -[x] Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+- [x] Melakukan add-commit-push ke GitHub.
