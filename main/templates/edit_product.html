@@ -1,0 +1,95 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="min-h-screen bg-gray-50 py-20">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Edit Product</h1>
+      <p class="text-gray-600">Update your Manchester United product details</p>
+      <div
+        class="w-32 h-1 bg-gradient-to-r from-[#db1d24] to-red-600 mx-auto mt-4 rounded-full"
+      ></div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="px-6 py-8">
+        <form method="POST" class="space-y-6">
+          {% csrf_token %} {% for field in form %}
+          <div>
+            <label
+              for="{{ field.id_for_label }}"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              {{ field.label }} {% if field.field.required %}<span
+                class="text-red-500"
+                >*</span
+              >{% endif %}
+            </label>
+            {{ field }} {% if field.help_text %}
+            <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+            {% endif %} {% for error in field.errors %}
+            <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          <div class="flex gap-4 pt-4">
+            <button
+              type="submit"
+              class="flex-1 bg-gradient-primary hover:bg-gradient-primary-hover text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+            >
+              Update Product
+            </button>
+            <a
+              href="{% url 'main:show_main' %}"
+              class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-center"
+            >
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Style form inputs */
+  input[type="text"],
+  input[type="number"],
+  input[type="url"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="url"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: #db1d24;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(219, 29, 36, 0.1);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #db1d24;
+  }
+</style>
+
+{% endblock content %}

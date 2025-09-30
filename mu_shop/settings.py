@@ -148,15 +148,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if PRODUCTION:
-    # Production: hanya gunakan STATIC_ROOT
-    STATIC_ROOT = BASE_DIR / "staticfiles"
-else:
-    # Development: gunakan STATICFILES_DIRS
-    STATICFILES_DIRS = [
-        BASE_DIR / "static",
-    ]
-    STATIC_ROOT = BASE_DIR / "staticfiles"
+# Static files directories for development
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # merujuk ke /static root project pada mode development
+]
+
+# Static files collection directory
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # WhiteNoise configuration for production
 if PRODUCTION:

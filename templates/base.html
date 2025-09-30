@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% block meta %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ app_name }} - {{ shop_description }}</title>
@@ -11,38 +12,24 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
       rel="stylesheet"
     />
+    {% endblock meta %}
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    {% block meta %} {% endblock meta %}
+    <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
   </head>
 
   <body>
-    <header class="flex flex-col fixed top-0 w-full z-50 shadow-lg">
-      <div
-        class="w-full bg-[#2a2a2a] px-10 max-sm:px-5 py-2 flex text-white text-sm justify-end"
-      >
-        <p>Muhammad Fauzan - 2406496302 - PBP E</p>
-      </div>
-      <div
-        class="w-full bg-[#db1d24] flex items-center justify-between px-10 max-sm:px-5 py-4 mx-auto text-white"
-      >
-        <div class="flex gap-2 items-center">
-          <img
-            src="{% static 'main/images/logo.png' %}"
-            alt="MU SHOP Logo"
-            class="h-12 max-sm:h-10"
-          />
-          <div class="font-bold text-2xl">Manchester Shop</div>
-        </div>
-        <nav>
-          <ul class="flex space-x-4 hidden md:flex">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#products">Products</a></li>
-            <li><a href="#featured">Featured</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    {% block content %} {% endblock content %}
+    <!-- Top Info Bar -->
+    <div
+      class="w-full bg-[#2a2a2a] px-4 sm:px-6 lg:px-8 py-2 flex text-white text-sm justify-end fixed top-0 w-full z-50"
+    >
+      <p>Muhammad Fauzan - 2406496302 - PBP E</p>
+    </div>
+
+    <!-- Navbar Component -->
+    <div class="fixed top-8 w-full z-40">{% include 'navbar.html' %}</div>
+
+    <!-- Main Content with proper top padding to account for fixed navbar -->
+    <div class="pt-24">{% block content %} {% endblock content %}</div>
 
     <footer class="footer bg-[#2a2a2a] text-white py-6">
       <div class="container mx-auto text-center">

@@ -1,41 +1,4 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<style>
-  body {
-    font-family: "Plus Jakarta Sans", sans-serif;
-  }
-
-  /* Custom animations and gradients that Tailwind can't handle */
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 1s ease-out;
-  }
-
-  .bg-gradient-hero {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-  }
-
-  .bg-gradient-stats {
-    background: linear-gradient(90deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);
-  }
-
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #db1d24 0%, #ff4444 100%);
-  }
-
-  .bg-gradient-primary-hover:hover {
-    background: linear-gradient(135deg, #ff4444 0%, #db1d24 100%);
-  }
-</style>
 
 <section
   class="hero relative min-h-screen flex items-center justify-center text-white overflow-hidden"
@@ -121,92 +84,92 @@
     </div>
   </section>
 
-  {% if featured_products %}
-  <section class="mb-16" id="featured">
-    <h2 class="text-4xl font-bold text-center mb-12 text-gray-900">
-      Featured Products
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {% for product in featured_products %}
-      <a
-        href="{% url 'main:show_product' product.id %}"
-        class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
-      >
-        <div class="relative h-64 overflow-hidden">
-          <img
-            src="{{product.thumbnail}}"
-            alt="{{ product.name }}"
-            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          />
-          <div
-            class="absolute top-3 left-3 bg-gradient-primary text-white px-3 py-1 rounded-full text-xs font-bold uppercase"
-          >
-            Featured
-          </div>
-          <div
-            class="absolute top-3 right-3 bg-black/70 text-white px-3 py-1 rounded-full text-xs"
-          >
-            {{ product.get_category_display }}
-          </div>
-        </div>
-        <div class="p-6">
-          <h3 class="text-xl font-bold mb-2 text-gray-900">
-            {{ product.name }}
-          </h3>
-          <p class="text-gray-600 mb-4 line-clamp-3">
-            {{ product.description }}
-          </p>
-          <div class="text-2xl font-bold text-[#db1d24]">
-            {{ currency }} {{ product.price|floatformat:0 }}
-          </div>
-        </div>
-      </a>
-      {% endfor %}
-    </div>
-  </section>
-  {% endif %}
-
   <section id="products">
     <h2 class="text-4xl font-bold text-center mb-12 text-gray-900">
       All Products
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {% for product in products %}
-      <a
-        href="{% url 'main:show_product' product.id %}"
-        class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
+      <div
+        class="bg-white rounded-xl flex flex-col shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden relative"
       >
-        <div class="relative h-64 overflow-hidden">
-          <img
-            src="{{product.thumbnail}}"
-            alt="{{ product.name }}"
-            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          />
-          {% if product.is_featured %}
-          <div
-            class="absolute top-3 left-3 bg-gradient-primary text-white px-3 py-1 rounded-full text-xs font-bold uppercase"
-          >
-            Featured
+        <a href="{% url 'main:show_product' product.id %}" class="block">
+          <div class="relative h-64 overflow-hidden">
+            <img
+              src="{{product.thumbnail}}"
+              alt="{{ product.name }}"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+            {% if product.is_featured %}
+            <div
+              class="absolute top-3 left-3 bg-gradient-primary text-white px-3 py-1 rounded-full text-xs font-bold uppercase"
+            >
+              Featured
+            </div>
+            {% endif %}
+            <div
+              class="absolute top-3 right-3 bg-black/70 text-white px-3 py-1 rounded-full text-xs"
+            >
+              {{ product.get_category_display }}
+            </div>
           </div>
-          {% endif %}
-          <div
-            class="absolute top-3 right-3 bg-black/70 text-white px-3 py-1 rounded-full text-xs"
-          >
-            {{ product.get_category_display }}
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-gray-900">
+              {{ product.name }}
+            </h3>
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              {{ product.description }}
+            </p>
+            <div class="text-2xl font-bold text-[#db1d24]">
+              {{ currency }} {{ product.price|floatformat:0 }}
+            </div>
+          </div>
+        </a>
+        {% if user.is_authenticated and product.user == user %}
+        <div class="px-6 pb-6 self-end">
+          <div class="flex gap-2">
+            <a
+              href="{% url 'main:edit_product' product.id %}"
+              class="inline-flex items-center px-4 py-2 rounded-full font-semibold text-white text-xs uppercase tracking-wider transition-all duration-300 ease-out bg-gradient-primary hover:bg-gradient-primary-hover hover:-translate-y-0.5 shadow-md hover:shadow-lg group"
+            >
+              Edit
+              <svg
+                class="w-4 h-4 ml-2 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+            </a>
+            <a
+              href="{% url 'main:delete_product' product.id %}"
+              class="inline-flex items-center px-4 py-2 rounded-full font-semibold text-white text-xs uppercase tracking-wider transition-all duration-300 ease-out bg-red-600 hover:bg-red-700 hover:-translate-y-0.5 shadow-md hover:shadow-lg group"
+            >
+              Delete
+              <svg
+                class="w-4 h-4 ml-2 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
+              </svg>
+            </a>
           </div>
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-bold mb-2 text-gray-900">
-            {{ product.name }}
-          </h3>
-          <p class="text-gray-600 mb-4 line-clamp-3">
-            {{ product.description }}
-          </p>
-          <div class="text-2xl font-bold text-[#db1d24]">
-            {{ currency }} {{ product.price|floatformat:0 }}
-          </div>
-        </div>
-      </a>
+        {% endif %}
+      </div>
       {% empty %}
       <div class="col-span-full text-center py-16">
         <h3 class="text-2xl font-bold text-gray-900 mb-4">
