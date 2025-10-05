@@ -521,7 +521,7 @@
                                       </svg>
                                       Edit Page
                                   </a>
-                                  
+
                               </div>
                               <!-- Modal-based actions -->
                               <div class="flex gap-2">
@@ -643,7 +643,7 @@
           // Show loading toast
           showToast('Deleting...', 'Please wait while we delete the product.', 'normal', 2000);
 
-          const response = await fetch(`/product/${productId}/delete-ajax`, {
+          const response = await fetch(`/product/${productId}/delete-ajax/`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',

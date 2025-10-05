@@ -19,7 +19,7 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('logout-ajax/', logout_ajax, name='logout_ajax'),
     path('product/<str:id>/edit', edit_product,name='edit_product'),
-    path('product/<str:id>/edit-ajax', edit_product_ajax,name='edit_product_ajax'),
+    path('product/<str:id>/edit-ajax/', edit_product_ajax,name='edit_product_ajax'),
     path('product/<str:id>/delete', delete_product,name='delete_product'),
-    path('product/<str:id>/delete-ajax', delete_product_ajax,name='delete_product_ajax'),
+    path('product/<str:id>/delete-ajax/', delete_product_ajax,name='delete_product_ajax'),
 ]

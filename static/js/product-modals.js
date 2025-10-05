@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch(
-          `/product/${deleteProductId}/delete-ajax`,
+          `/product/${deleteProductId}/delete-ajax/`,
           {
             method: "POST",
             headers: {
