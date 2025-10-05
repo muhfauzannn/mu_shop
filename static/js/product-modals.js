@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const url = isEditMode
           ? `/product/${currentProductId}/edit-ajax/`
-          : "/create-ajax/";
+          : "/create-product-ajax/";
         const method = "POST";
 
         const response = await fetch(url, {
