@@ -16,43 +16,94 @@
     <!-- Form Container -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
       <div class="px-6 py-8">
+        <!-- Success Message -->
+        <div
+          id="success-message"
+          class="hidden mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg"
+        >
+          <div class="flex">
+            <svg
+              class="w-5 h-5 mr-2 mt-0.5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            <span id="success-text">Product created successfully!</span>
+          </div>
+        </div>
 
-        <form method="POST" class="space-y-6">
-            {% csrf_token %}
-            {% for field in form %}
-                <div>
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
-                        {{ field.label }}
-                        {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
-                    </label>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-            <div class="flex gap-4 pt-4">
-                <button
-                    type="submit"
-                    class="flex-1 bg-gradient-primary hover:bg-gradient-primary-hover text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+        <!-- Error Messages -->
+        <div id="error-container" class="hidden mb-6"></div>
+
+        <form id="product-form" class="space-y-6">
+          {% csrf_token %} {% for field in form %}
+          <div>
+            <label
+              for="{{ field.id_for_label }}"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              {{ field.label }} {% if field.field.required %}<span
+                class="text-red-500"
+                >*</span
+              >{% endif %}
+            </label>
+            {{ field }} {% if field.help_text %}
+            <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+            {% endif %}
+            <div class="field-errors hidden"></div>
+          </div>
+          {% endfor %}
+          <div class="flex gap-4 pt-4">
+            <button
+              type="submit"
+              id="submit-btn"
+              class="flex-1 bg-gradient-primary hover:bg-gradient-primary-hover text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+            >
+              <span id="submit-text">Add Product</span>
+              <div
+                id="loading-spinner"
+                class="inline-block ml-2"
+                style="display: none"
+              >
+                <svg
+                  class="animate-spin h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
                 >
-                    Add Product
-                </button>
-                <a
-                    href="{% url 'main:show_main' %}"
-                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-center"
-                >
-                    Cancel
-                </a>
-            </div>
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
+            </button>
+            <a
+              href="{% url 'main:show_main' %}"
+              class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-all duration-300 text-center"
+            >
+              Cancel
+            </a>
+          </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+
 
 <style>
   /* Style form inputs */
@@ -91,6 +142,162 @@
     height: 20px;
     accent-color: #db1d24;
   }
+
+  .field-error {
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("product-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const submitText = document.getElementById("submit-text");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    const successMessage = document.getElementById("success-message");
+    const successText = document.getElementById("success-text");
+    const errorContainer = document.getElementById("error-container");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      // Clear previous messages
+      clearMessages();
+
+      // Show loading state
+      setLoadingState(true);
+
+      try {
+        // Get form data
+        const formData = new FormData(form);
+        const data = {};
+
+        // Convert FormData to JSON
+        for (let [key, value] of formData.entries()) {
+          if (key !== "csrfmiddlewaretoken") {
+            // Handle checkbox values
+            if (value === "on") {
+              data[key] = true;
+            } else if (
+              form.querySelector(`input[name="${key}"][type="checkbox"]`) &&
+              value !== "on"
+            ) {
+              data[key] = false;
+            } else {
+              data[key] = value;
+            }
+          }
+        }
+
+        // Send AJAX request
+        const response = await fetch("/create-product-ajax/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Show success toast
+          showToast("Success!", result.message, "success");
+
+          // Reset form
+          form.reset();
+
+          // Redirect after delay
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
+        } else {
+          // Show field errors
+          if (result.errors) {
+            showFieldErrors(result.errors);
+          } else {
+            // Show field errors or general error toast
+            if (result.errors) {
+              showFieldErrors(result.errors);
+            } else {
+              showToast(
+                "Error!",
+                result.message ||
+                  "An error occurred while creating the product.",
+                "error"
+              );
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        showToast(
+          "Network Error!",
+          "Please check your connection and try again.",
+          "error"
+        );
+      } finally {
+        setLoadingState(false);
+      }
+    });
+
+    function setLoadingState(loading) {
+      if (loading) {
+        submitBtn.disabled = true;
+        submitText.textContent = "Creating...";
+        loadingSpinner.style.display = "inline-block";
+      } else {
+        submitBtn.disabled = false;
+        submitText.textContent = "Add Product";
+        loadingSpinner.style.display = "none";
+      }
+    }
+
+    function clearMessages() {
+      successMessage.classList.add("hidden");
+      errorContainer.classList.add("hidden");
+      errorContainer.innerHTML = "";
+
+      // Clear field errors
+      document.querySelectorAll(".field-errors").forEach((el) => {
+        el.classList.add("hidden");
+        el.innerHTML = "";
+      });
+    }
+
+    function showFieldErrors(errors) {
+      for (const [fieldName, fieldErrors] of Object.entries(errors)) {
+        const field = form.querySelector(`[name="${fieldName}"]`);
+        if (field) {
+          const errorDiv = field.parentElement.querySelector(".field-errors");
+          if (errorDiv) {
+            errorDiv.innerHTML = fieldErrors
+              .map((error) => `<p class="field-error">${error}</p>`)
+              .join("");
+            errorDiv.classList.remove("hidden");
+          }
+        }
+      }
+    }
+
+    function showGeneralError(message) {
+      errorContainer.innerHTML = `
+            <div class="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                <div class="flex">
+                    <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            </div>
+        `;
+      errorContainer.classList.remove("hidden");
+    }
+  });
+</script>
 
 {% endblock content %}

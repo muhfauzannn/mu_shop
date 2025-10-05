@@ -37,7 +37,6 @@
 <div
   class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center px-4 sm:px-6 lg:px-8"
 >
-
   <div class="max-w-md w-full space-y-8 relative z-10">
     <div class="animate-fade-in">
       <!-- Header -->
@@ -53,7 +52,7 @@
       <div
         class="mt-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-xl p-8 border border-gray-200"
       >
-        <form method="POST" class="space-y-6">
+        <form id="register-form" class="space-y-6">
           {% csrf_token %}
 
           <!-- Username Field -->
@@ -155,10 +154,35 @@
           <div>
             <button
               type="submit"
-              name="submit"
+              id="submit-btn"
               class="w-full bg-gradient-primary hover:bg-gradient-primary-hover text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl uppercase tracking-wider text-sm"
             >
-              Create Account
+              <span id="submit-text">Create Account</span>
+              <div
+                id="loading-spinner"
+                class="inline-block ml-2"
+                style="display: none"
+              >
+                <svg
+                  class="animate-spin h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
             </button>
           </div>
         </form>
@@ -232,6 +256,9 @@
   </div>
 </div>
 
+<!-- Toast Component -->
+{% include 'toast.html' %}
+
 <script>
   // Add custom styling to Django form fields
   document.addEventListener("DOMContentLoaded", function () {
@@ -250,6 +277,124 @@
         input.placeholder = "Confirm your password";
       }
     });
+
+    // AJAX Register Form Handler
+    const registerForm = document.getElementById("register-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const submitText = document.getElementById("submit-text");
+    const loadingSpinner = document.getElementById("loading-spinner");
+
+    registerForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      // Clear previous error messages
+      clearFieldErrors();
+
+      // Show loading state
+      setLoadingState(true);
+
+      try {
+        // Get form data
+        const formData = new FormData(registerForm);
+        const data = {};
+
+        for (let [key, value] of formData.entries()) {
+          if (key !== "csrfmiddlewaretoken") {
+            data[key] = value;
+          }
+        }
+
+        // Send AJAX request
+        const response = await fetch("/register-ajax/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Show success toast
+          showToast("Success!", result.message, "success");
+
+          // Reset form
+          registerForm.reset();
+
+          // Redirect to login after delay
+          setTimeout(() => {
+            window.location.href = "/login/";
+          }, 2000);
+        } else {
+          // Show field errors
+          if (result.errors) {
+            showFieldErrors(result.errors);
+          } else {
+            showToast(
+              "Registration Failed!",
+              result.message || "Please check your input and try again.",
+              "error"
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        showToast(
+          "Network Error!",
+          "Please check your connection and try again.",
+          "error"
+        );
+      } finally {
+        setLoadingState(false);
+      }
+    });
+
+    function setLoadingState(loading) {
+      if (loading) {
+        submitBtn.disabled = true;
+        submitText.textContent = "Creating Account...";
+        loadingSpinner.style.display = "inline-block";
+      } else {
+        submitBtn.disabled = false;
+        submitText.textContent = "Create Account";
+        loadingSpinner.style.display = "none";
+      }
+    }
+
+    function clearFieldErrors() {
+      // Remove existing error displays
+      document.querySelectorAll(".field-error").forEach((el) => el.remove());
+
+      // Remove error styling from inputs
+      formInputs.forEach((input) => {
+        input.classList.remove("border-red-500");
+        input.classList.add("border-gray-300");
+      });
+    }
+
+    function showFieldErrors(errors) {
+      for (const [fieldName, fieldErrors] of Object.entries(errors)) {
+        const field = registerForm.querySelector(`[name="${fieldName}"]`);
+        if (field) {
+          // Add error styling to field
+          field.classList.remove("border-gray-300");
+          field.classList.add("border-red-500");
+
+          // Create error message element
+          const errorDiv = document.createElement("div");
+          errorDiv.className = "field-error text-red-600 text-sm mt-1";
+          errorDiv.innerHTML = fieldErrors
+            .map((error) => `<p>${error}</p>`)
+            .join("");
+
+          // Insert error message after the field's parent
+          field.parentElement.appendChild(errorDiv);
+        }
+      }
+    }
   });
 </script>
 
