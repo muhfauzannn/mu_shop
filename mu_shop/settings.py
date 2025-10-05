@@ -147,18 +147,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# Static files directories for development
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # merujuk ke /static root project pada mode development
-]
-
-# Static files collection directory
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# WhiteNoise configuration for production
-if PRODUCTION:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static' # merujuk ke /static root project pada mode development
+    ]
+else:
+    STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
