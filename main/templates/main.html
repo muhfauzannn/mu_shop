@@ -107,7 +107,7 @@
     <div class="flex gap-4 items-center justify-center mb-8">
       <h2 class="text-4xl font-bold text-gray-900">All Products</h2>
       <button
-        onclick="reloadProducts()"
+        onclick="reloadProducts('asc')"
         class="inline-flex items-center px-4 py-2 rounded-full font-semibold text-white text-sm bg-gradient-primary hover:bg-gradient-primary-hover transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
       >
         <svg
@@ -124,6 +124,44 @@
           ></path>
         </svg>
         Reload
+      </button>
+      <button
+        onclick="reloadProducts('asc')"
+        class="inline-flex items-center px-4 py-2 rounded-full font-semibold text-white text-sm bg-gradient-primary hover:bg-gradient-primary-hover transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+      >
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          ></path>
+        </svg>
+        Ascending
+      </button>
+      <button
+        onclick="reloadProducts('desc')"
+        class="inline-flex items-center px-4 py-2 rounded-full font-semibold text-white text-sm bg-gradient-primary hover:bg-gradient-primary-hover transition-all duration-300 hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+      >
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          ></path>
+        </svg>
+        Descending
       </button>
     </div>
 
@@ -358,12 +396,12 @@
           });
       }
 
-      async loadProducts() {
+      async loadProducts(sort) {
+          console.log(sort);
           this.showLoader();
 
           try {
-              const response = await fetch('/json/');
-
+              const response = await fetch(`/json/?sort=${sort}`);
               if (!response.ok) {
                   throw new Error(`HTTP error! status: ${response.status}`);
               }
@@ -569,7 +607,7 @@
   });
 
   // Global reload function that can be called from anywhere
-  function reloadProducts() {
+  function reloadProducts(sort) {
       console.log('Reloading products...');
       if (window.productManagerInstance) {
           // Reset to "All" filter and reload
@@ -588,7 +626,7 @@
           });
 
           // Reload products
-          window.productManagerInstance.loadProducts();
+          window.productManagerInstance.loadProducts(sort);
       } else {
           console.warn('ProductManager not initialized yet, creating new instance...');
           window.productManagerInstance = new ProductManager();
@@ -659,7 +697,7 @@
 
               // Reload products after successful deletion
               if (window.productManagerInstance) {
-                  window.productManagerInstance.loadProducts();
+                  window.productManagerInstance.loadProducts('asc');
               }
           } else {
               // Show error toast
@@ -677,6 +715,8 @@
       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
       return csrfToken ? csrfToken.value : '';
   }
+
+
 
   // Make productManagerInstance available globally for modals
   window.productManagerInstance = null;
